@@ -13,14 +13,26 @@ import sys
 from functools import reduce
 from fractions import gcd
 
+# https://www.mathblog.dk/hackerrank-between-two-sets-in-python/
 #
 # Complete the getTotalX function below.
 #
+
+def gcd(a, b):
+    while a % b != 0:
+        a, b = b, (a % b)
+    return b
+
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
+
 def getTotalX(a, b):
-    lcm_a = reduce(lambda x, y: x * y // gcd(x, y), a)
-    gcd_b = reduce(gcd, b)
-    gcd_b_copy = gcd_b
-    return sum(1 for x in range(lcm_a,gcd_b+gcd_b_copy,lcm_a) if gcd_b%x==0)
+    min_gcd = reduce(gcd, b)
+    max_lcm = reduce(lcm, a)
+    count = sum([1 for x in range(max_lcm, min_gcd + 1, max_lcm) if min_gcd % x == 0])
+    return count
+
 
 if __name__ == '__main__':
     f = open(os.environ['OUTPUT_PATH'], 'w')
